@@ -12,8 +12,8 @@
 
 def count_threes(n):
   # YOUR CODE HERE
-
-  return
+  # Divide n by 3 and round down to get the number of multiples
+  return int(n/3)
 
 
 # Part B. longest_consecutive_repeating_char
