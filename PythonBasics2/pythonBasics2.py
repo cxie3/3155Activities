@@ -57,5 +57,15 @@ def longest_consecutive_repeating_char(s):
 # and ignore spaces (i.e. case insensitive).
 def is_palindrome(s):
   # YOUR CODE HERE
-
-  return
+  # Set isPalindrome to bool value false
+  isPalindrome = False
+  # Lowercase everything
+  s = s.lower()
+  # Remove spaces from the string
+  s = s.replace(" ", "")
+  # Check if str is the same backward as forward
+  # if yes then set palindrome to true
+  if s[::-1] == s:
+    isPalindrome = True
+  # Return true or false
+  return isPalindrome
