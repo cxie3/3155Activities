@@ -2,10 +2,14 @@
 
 # imports
 import os  # os is used to get environment variables IP & PORT
-from flask import render_template, Flask, request  # Flask is the web app that we will customize
+from flask import render_template, Flask, request, redirect, url_for  # Flask is the web app that we will customize
 
 app = Flask(__name__)  # create an app
 
+notes = {1: {'title': 'First note', 'text': 'This is my first note', 'date': '10-1-2020'},
+         2: {'title': 'Second note', 'text': 'This is my second note', 'date': '10-2-2020'},
+         3: {'title': 'Third note', 'text': 'This is my third note', 'date': '10-3-2020'}
+         }
 
 # @app.route is a decorator. It gives the function "index" special powers.
 # In this case it makes it so anyone going to "your-url/" makes this function
@@ -18,20 +22,13 @@ def index():
 
 @app.route('/notes')
 def get_notes():
-    notes = {1: {'title': 'First note', 'text': 'This is my first note', 'date': '10-1-2020'},
-             2: {'title': 'Second note', 'text': 'This is my second note', 'date': '10-2-2020'},
-             3: {'title': 'Third note', 'text': 'This is my third note', 'date': '10-3-2020'}
-             }
     a_user = {'name': 'Christina', 'email': 'mogli@uncc.edu'}
 
     return render_template("notes.html", notes=notes, user=a_user)
 
 @app.route('/notes/<note_id>')
 def get_note(note_id):
-    notes = {1: {'title': 'First note', 'text': 'This is my first note', 'date': '10-1-2020'},
-             2: {'title': 'Second note', 'text': 'This is my second note', 'date': '10-2-2020'},
-             3: {'title': 'Third note', 'text': 'This is my third note', 'date': '10-3-2020'}
-             }
+
     a_user = {'name': 'Christina', 'email': 'mogli@uncc.edu'}
 
     return render_template("note.html", note=notes[int(note_id)], user=a_user)
@@ -40,10 +37,23 @@ def get_note(note_id):
 def new_note():
     #create mock user
     a_user = {'name': 'Christina', 'email': 'mogli@uncc.edu'}
-    print('request method is', request.method)
+
     if request.method == 'POST':
-        request_data = request.form
-        return f"data: {request_data} !"
+        # get title data
+        title = request.form['title']
+        # get note data
+        text = request.form['noteText']
+        # create data stamp
+        from datetime import date
+        today = date.today()
+        # format date mm/dd/yyy
+        today = today.strftime("%m-%d-%Y")
+        # get the last ID used and increment by 1
+        id = len(notes)+1
+        # create new not entry
+        notes[id] = {'title': title, 'text': text, 'date': today}
+        # ready to render response - redirect to notes listing
+        return redirect(url_for('get_notes'))
     else:
         return render_template('new.html', user=a_user)
 
