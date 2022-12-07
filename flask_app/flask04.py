@@ -61,6 +61,7 @@ def new_note():
         db.session.commit()
         return redirect(url_for('get_notes'))
     else:
+        # question 4
         a_user = db.session.query(User).filter_by(email='cxie3@uncc.edu').one()
         return render_template('new.html', user=a_user)
 
